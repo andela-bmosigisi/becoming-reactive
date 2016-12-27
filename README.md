@@ -1,3 +1,3 @@
 # Becoming reactive
 
-A collection of personal mini-projects for learning react.
+A collection of mini-projects for trying out React concepts.
