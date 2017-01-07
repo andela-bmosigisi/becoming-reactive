@@ -4,8 +4,10 @@ class Controls extends Component {
   render() {
     return (
       <div className="controls">
-        <button className="control-button">Start</button>
-        <button className="control-button">Reset</button>
+        <button className="control-button"
+          onClick={() => this.props.start()}>Start</button>
+        <button className="control-button"
+          onClick={() => this.props.reset()}>Reset</button>
       </div>
     )
   }

@@ -17,15 +17,15 @@ body {
 
 .row {
   margin: 0px;
-  height: 20px;
+  height: 15px;
 }
 
 .cell {
   border-right: 1px solid #2F4F4F;
   border-bottom: 1px solid #2F4F4F;
   display: inline-block;
-  height: 19px;
-  width: 19px;
+  height: 14px;
+  width: 14px;
   background-color: white;
 }
 

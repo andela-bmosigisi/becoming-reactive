@@ -9,7 +9,13 @@ class Board extends Component {
     for (let i = 0; i < dimensions; i++) {
       rows[i] = [];
       for (let j = 0; j < dimensions; j++) {
-        rows[i].push(<Cell key={(i * dimensions) + j} />);
+        let index = (i * dimensions) + j;
+        rows[i].push(
+          <Cell key={index} index={index}
+          handleClick={(k) => this.props.handleCellClick(k)}
+          active={this.props.cells[i][j]}
+          />
+        );
       }
     }
 
