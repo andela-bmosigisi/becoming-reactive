@@ -5,7 +5,7 @@ import Controls from './Controls';
 class Game extends Component {
   constructor() {
     super();
-    this.dimensions = 40;
+    this.dimensions = 50;
     let cells = this.generateEmptyCells();
 
     this.state = {
@@ -14,15 +14,15 @@ class Game extends Component {
   }
 
   startSimulation() {
-    this.props.intervalId = setInterval(
+    this.intervalId = setInterval(
       () => {
         this.refreshCellState()
-      }, 1000
+      }, 200
     );
   }
 
   resetSimulation() {
-    clearInterval(this.props.intervalId);
+    clearInterval(this.intervalId);
     let cells = this.generateEmptyCells();
     this.setState({
       cells: cells
@@ -32,17 +32,47 @@ class Game extends Component {
   refreshCellState() {
     let newCells = this.cloneCells();
 
-    for (var i = 0; i < this.dimensions; i++) {
-      for (var j = 0; j < this.dimensions; j++) {
+    for (let i = 0; i < this.dimensions; i++) {
+      for (let j = 0; j < this.dimensions; j++) {
         // check each cell as per game of life rules.
+        let neighbourCount = this.getCellNeighbourCount(i, j);
+        if (neighbourCount < 2 && this.state.cells[i][j]) {
+          newCells[i][j] = 0;
+        } else if ((neighbourCount === 2 || neighbourCount === 3)
+            && this.state.cells[i][j]) {
+          newCells[i][j] = 1;
+        } else if (this.state.cells[i][j] && neighbourCount > 3) {
+          newCells[i][j] = 0;
+        } else if (this.state.cells[i][j] === 0 && neighbourCount === 3) {
+          newCells[i][j] = 1;
+        }
       }
     }
 
+    this.setState({
+      cells: newCells
+    });
+  }
+
+  getCellNeighbourCount(i, j) {
+    let count = 0;
+    for (let m = i - 1; m < i + 2; m++) {
+      for (let n = j - 1; n < j + 2; n++) {
+        if (m === i && n === j) {
+          continue;
+        }
+        if (this.state.cells[m] && this.state.cells[m][n]) {
+          count++;
+        }
+      }
+    }
+
+    return count;
   }
 
   generateEmptyCells() {
     let cells = Array(this.dimensions);
-    for (var i = 0; i < this.dimensions; i++) {
+    for (let i = 0; i < this.dimensions; i++) {
       cells[i] = Array(this.dimensions).fill(0);
     }
 
@@ -70,6 +100,19 @@ class Game extends Component {
     });
   }
 
+  generateRandomConfig() {
+    let cells = this.generateEmptyCells();
+    for (let i = 0; i < this.dimensions; i++) {
+      for (let j = 0; j < this.dimensions; j++) {
+        cells[i][j] = Math.random() < 0.5 ? 0 : 1;
+      }
+    }
+
+    this.setState({
+      cells: cells
+    });
+  }
+
   render() {
     return (
       <div className="game">
@@ -78,6 +121,7 @@ class Game extends Component {
         <Controls
           start={() => this.startSimulation()}
           reset={() => this.resetSimulation()}
+          random={() => this.generateRandomConfig()}
         />
       </div>
     );
