@@ -26,12 +26,19 @@ body {
   display: inline-block;
   height: 19px;
   width: 19px;
+  background-color: white;
 }
 
-.cell.active {
+.cell:hover, .cell.active {
   background-color: #2F4F4F;
 }
 
-.cell.inactive {
-  background-color: white;
+.controls {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.control-button {
+  display: inline-block;
+  margin-right: 20px;
 }

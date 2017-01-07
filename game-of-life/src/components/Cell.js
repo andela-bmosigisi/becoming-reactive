@@ -10,8 +10,8 @@ class Cell extends Component {
   }
 
   render() {
-    let isActive = this.state.active ? "active" : "inactive";
-    let classNameStr = `${isActive} cell`;
+    const isActive = this.state.active ? "active" : "";
+    const classNameStr = `${isActive} cell`;
 
     return (
       <div className={classNameStr}>
