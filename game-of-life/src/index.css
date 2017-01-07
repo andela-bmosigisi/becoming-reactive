@@ -1,0 +1,37 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.game {
+  margin-top: 100px;
+  text-align: center;
+}
+
+.board {
+  border-top: 1px solid #2F4F4F;
+  border-left: 1px solid #2F4F4F;
+  display: inline-block;
+}
+
+.row {
+  margin: 0px;
+  height: 20px;
+}
+
+.cell {
+  border-right: 1px solid #2F4F4F;
+  border-bottom: 1px solid #2F4F4F;
+  display: inline-block;
+  height: 19px;
+  width: 19px;
+}
+
+.cell.active {
+  background-color: #2F4F4F;
+}
+
+.cell.inactive {
+  background-color: white;
+}
