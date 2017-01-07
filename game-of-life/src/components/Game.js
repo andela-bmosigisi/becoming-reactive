@@ -6,10 +6,7 @@ class Game extends Component {
   constructor() {
     super();
     this.dimensions = 40;
-    let cells = Array(this.dimensions);
-    for (var i = 0; i < this.dimensions; i++) {
-      cells[i] = Array(this.dimensions).fill(0);
-    }
+    let cells = this.generateEmptyCells();
 
     this.state = {
       cells: cells
@@ -26,18 +23,44 @@ class Game extends Component {
 
   resetSimulation() {
     clearInterval(this.props.intervalId);
+    let cells = this.generateEmptyCells();
+    this.setState({
+      cells: cells
+    });
   }
 
   refreshCellState() {
+    let newCells = this.cloneCells();
+
+    for (var i = 0; i < this.dimensions; i++) {
+      for (var j = 0; j < this.dimensions; j++) {
+        // check each cell as per game of life rules.
+      }
+    }
 
   }
 
-  handleCellClick(index) {
+  generateEmptyCells() {
+    let cells = Array(this.dimensions);
+    for (var i = 0; i < this.dimensions; i++) {
+      cells[i] = Array(this.dimensions).fill(0);
+    }
+
+    return cells;
+  }
+
+  cloneCells() {
     let newCells = [];
     newCells = this.state.cells.map((value, index) => {
       return value.slice();
-    })
-    let i = Math.floor(index/this.dimensions),
+    });
+
+    return newCells;
+  }
+
+  handleCellClick(index) {
+    let newCells = this.cloneCells(),
+      i = Math.floor(index/this.dimensions),
       j = index - (this.dimensions * i);
 
     newCells[i][j] = newCells[i][j] ? 0 : 1;
