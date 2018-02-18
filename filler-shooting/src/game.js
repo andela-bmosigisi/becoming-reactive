@@ -10,6 +10,7 @@ export default class Game extends Component {
     this.state = {
       grid: emptyGrid,
     };
+
   }
 
   buildRow(row, index) {

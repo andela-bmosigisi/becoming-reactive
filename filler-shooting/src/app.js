@@ -5,8 +5,8 @@ import SettingsScene from './settings-scene';
 import { CELL_SIZE, X_TILES, Y_TILES, SCENES } from './constants';
 
 const style = {
-  height: CELL_SIZE * Y_TILES,
-  width: CELL_SIZE * X_TILES,
+  minHeight: CELL_SIZE * Y_TILES,
+  minWidth: CELL_SIZE * X_TILES,
   background: '#E0E0E0',
   padding: CELL_SIZE / 10,
 };
@@ -16,7 +16,7 @@ class FillerShooting extends React.Component {
     super();
 
     this.state = {
-      currentScene: SCENES.GAME,
+      currentScene: SCENES.SETTINGS,
     };
   }
 
