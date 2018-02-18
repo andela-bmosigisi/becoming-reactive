@@ -3,14 +3,16 @@ import Cell from './cell';
 import { CELL_SIZE, X_TILES, Y_TILES } from './constants';
 
 export default class Game extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
+    const { level, speed } = props;
     const emptyGrid = Array(Y_TILES).fill(Array(X_TILES).fill(1, 0, X_TILES), 0, Y_TILES);
     this.state = {
       grid: emptyGrid,
+      level,
+      speed,
     };
-
   }
 
   buildRow(row, index) {

@@ -26,21 +26,27 @@ class FillerShooting extends React.Component {
 
   handleSpeedChange(speed) { this.setState({ speed }); }
 
-  handleStartGame() { this.setState({ currentScene: SCENES.GAME }); }
+  handleChangeScene(scene) { this.setState({ currentScene: scene }); }
 
   render() {
     const { currentScene, level, speed } = this.state;
 
     return (
       <div style={style}>
-        { currentScene === SCENES.GAME && <Game speed={speed} level={level} /> }
+        { currentScene === SCENES.GAME &&
+          <Game
+            speed={speed}
+            level={level}
+            onRequestEndGame={this.handleChangeScene.bind(this, SCENES.OVER)}
+          />
+        }
         { currentScene != SCENES.GAME &&
           <SettingsScene
             showOverScene={currentScene === SCENES.OVER}
             showSettingsScene={currentScene === SCENES.SETTINGS}
             onRequestLevelChange={::this.handleLevelChange}
             onRequestSpeedChange={::this.handleSpeedChange}
-            onRequestStartGame={::this.handleStartGame}
+            onRequestStartGame={this.handleChangeScene.bind(this, SCENES.GAME)}
             level={level}
             speed={speed}
           />

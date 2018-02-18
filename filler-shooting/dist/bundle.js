@@ -1040,9 +1040,9 @@ var FillerShooting = function (_React$Component) {
       this.setState({ speed: speed });
     }
   }, {
-    key: 'handleStartGame',
-    value: function handleStartGame() {
-      this.setState({ currentScene: _constants.SCENES.GAME });
+    key: 'handleChangeScene',
+    value: function handleChangeScene(scene) {
+      this.setState({ currentScene: scene });
     }
   }, {
     key: 'render',
@@ -1056,13 +1056,17 @@ var FillerShooting = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         { style: style },
-        currentScene === _constants.SCENES.GAME && _react2.default.createElement(_game2.default, { speed: speed, level: level }),
+        currentScene === _constants.SCENES.GAME && _react2.default.createElement(_game2.default, {
+          speed: speed,
+          level: level,
+          onRequestEndGame: this.handleChangeScene.bind(this, _constants.SCENES.OVER)
+        }),
         currentScene != _constants.SCENES.GAME && _react2.default.createElement(_settingsScene2.default, {
           showOverScene: currentScene === _constants.SCENES.OVER,
           showSettingsScene: currentScene === _constants.SCENES.SETTINGS,
           onRequestLevelChange: this.handleLevelChange.bind(this),
           onRequestSpeedChange: this.handleSpeedChange.bind(this),
-          onRequestStartGame: this.handleStartGame.bind(this),
+          onRequestStartGame: this.handleChangeScene.bind(this, _constants.SCENES.GAME),
           level: level,
           speed: speed
         })
@@ -18398,16 +18402,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Game = function (_Component) {
   _inherits(Game, _Component);
 
-  function Game() {
+  function Game(props) {
     _classCallCheck(this, Game);
 
-    var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this));
+    var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this, props));
+
+    var level = props.level,
+        speed = props.speed;
 
     var emptyGrid = Array(_constants.Y_TILES).fill(Array(_constants.X_TILES).fill(1, 0, _constants.X_TILES), 0, _constants.Y_TILES);
     _this.state = {
-      grid: emptyGrid
+      grid: emptyGrid,
+      level: level,
+      speed: speed
     };
-
     return _this;
   }
 
