@@ -664,6 +664,13 @@ var SCENES = exports.SCENES = {
   OVER: 2,
   GAME: 3
 };
+var CONTROLS = exports.CONTROLS = {
+  UP: 'up',
+  DOWN: 'down',
+  LEFT: 'left',
+  RIGHT: 'right',
+  ACTION: 'action'
+};
 
 /***/ }),
 /* 10 */
@@ -978,8 +985,6 @@ module.exports = focusNode;
 "use strict";
 
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
@@ -988,96 +993,13 @@ var _reactDom = __webpack_require__(19);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _game = __webpack_require__(28);
+var _fillerShooting = __webpack_require__(34);
 
-var _game2 = _interopRequireDefault(_game);
-
-var _settingsScene = __webpack_require__(30);
-
-var _settingsScene2 = _interopRequireDefault(_settingsScene);
-
-var _constants = __webpack_require__(9);
+var _fillerShooting2 = _interopRequireDefault(_fillerShooting);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var style = {
-  minHeight: _constants.CELL_SIZE * _constants.Y_TILES,
-  minWidth: _constants.CELL_SIZE * _constants.X_TILES,
-  background: '#E0E0E0',
-  padding: _constants.CELL_SIZE / 10
-};
-
-var FillerShooting = function (_React$Component) {
-  _inherits(FillerShooting, _React$Component);
-
-  function FillerShooting() {
-    _classCallCheck(this, FillerShooting);
-
-    var _this = _possibleConstructorReturn(this, (FillerShooting.__proto__ || Object.getPrototypeOf(FillerShooting)).call(this));
-
-    _this.state = {
-      currentScene: _constants.SCENES.SETTINGS,
-      level: 1,
-      speed: 1
-    };
-    return _this;
-  }
-
-  _createClass(FillerShooting, [{
-    key: 'handleLevelChange',
-    value: function handleLevelChange(level) {
-      this.setState({ level: level });
-    }
-  }, {
-    key: 'handleSpeedChange',
-    value: function handleSpeedChange(speed) {
-      this.setState({ speed: speed });
-    }
-  }, {
-    key: 'handleChangeScene',
-    value: function handleChangeScene(scene) {
-      this.setState({ currentScene: scene });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _state = this.state,
-          currentScene = _state.currentScene,
-          level = _state.level,
-          speed = _state.speed;
-
-
-      return _react2.default.createElement(
-        'div',
-        { style: style },
-        currentScene === _constants.SCENES.GAME && _react2.default.createElement(_game2.default, {
-          speed: speed,
-          level: level,
-          onRequestEndGame: this.handleChangeScene.bind(this, _constants.SCENES.OVER)
-        }),
-        currentScene != _constants.SCENES.GAME && _react2.default.createElement(_settingsScene2.default, {
-          showOverScene: currentScene === _constants.SCENES.OVER,
-          showSettingsScene: currentScene === _constants.SCENES.SETTINGS,
-          onRequestLevelChange: this.handleLevelChange.bind(this),
-          onRequestSpeedChange: this.handleSpeedChange.bind(this),
-          onRequestStartGame: this.handleChangeScene.bind(this, _constants.SCENES.GAME),
-          level: level,
-          speed: speed
-        })
-      );
-    }
-  }]);
-
-  return FillerShooting;
-}(_react2.default.Component);
-
-_reactDom2.default.render(_react2.default.createElement(FillerShooting, null), document.getElementById('app'));
+_reactDom2.default.render(_react2.default.createElement(_fillerShooting2.default, null), document.getElementById('app'));
 
 /***/ }),
 /* 17 */
@@ -19355,6 +19277,114 @@ module.exports = function() {
   return ReactPropTypes;
 };
 
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _game = __webpack_require__(28);
+
+var _game2 = _interopRequireDefault(_game);
+
+var _settingsScene = __webpack_require__(30);
+
+var _settingsScene2 = _interopRequireDefault(_settingsScene);
+
+var _constants = __webpack_require__(9);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var style = {
+  minHeight: _constants.CELL_SIZE * _constants.Y_TILES,
+  minWidth: _constants.CELL_SIZE * _constants.X_TILES,
+  background: '#E0E0E0',
+  padding: _constants.CELL_SIZE / 10
+};
+
+var FillerShooting = function (_Component) {
+  _inherits(FillerShooting, _Component);
+
+  function FillerShooting() {
+    _classCallCheck(this, FillerShooting);
+
+    var _this = _possibleConstructorReturn(this, (FillerShooting.__proto__ || Object.getPrototypeOf(FillerShooting)).call(this));
+
+    _this.state = {
+      currentScene: _constants.SCENES.SETTINGS,
+      level: 1,
+      speed: 1
+    };
+    return _this;
+  }
+
+  _createClass(FillerShooting, [{
+    key: 'handleLevelChange',
+    value: function handleLevelChange(level) {
+      this.setState({ level: level });
+    }
+  }, {
+    key: 'handleSpeedChange',
+    value: function handleSpeedChange(speed) {
+      this.setState({ speed: speed });
+    }
+  }, {
+    key: 'handleChangeScene',
+    value: function handleChangeScene(scene) {
+      this.setState({ currentScene: scene });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _state = this.state,
+          currentScene = _state.currentScene,
+          level = _state.level,
+          speed = _state.speed;
+
+
+      return _react2.default.createElement(
+        'div',
+        { style: style },
+        currentScene === _constants.SCENES.GAME && _react2.default.createElement(_game2.default, {
+          speed: speed,
+          level: level,
+          onRequestEndGame: this.handleChangeScene.bind(this, _constants.SCENES.OVER)
+        }),
+        currentScene != _constants.SCENES.GAME && _react2.default.createElement(_settingsScene2.default, {
+          showOverScene: currentScene === _constants.SCENES.OVER,
+          showSettingsScene: currentScene === _constants.SCENES.SETTINGS,
+          onRequestLevelChange: this.handleLevelChange.bind(this),
+          onRequestSpeedChange: this.handleSpeedChange.bind(this),
+          onRequestStartGame: this.handleChangeScene.bind(this, _constants.SCENES.GAME),
+          level: level,
+          speed: speed
+        })
+      );
+    }
+  }]);
+
+  return FillerShooting;
+}(_react.Component);
+
+exports.default = FillerShooting;
 
 /***/ })
 /******/ ]);

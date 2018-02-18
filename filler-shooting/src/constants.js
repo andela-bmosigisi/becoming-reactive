@@ -6,3 +6,10 @@ export const SCENES = {
   OVER: 2,
   GAME: 3,
 };
+export const CONTROLS = {
+  UP: 'up',
+  DOWN: 'down',
+  LEFT: 'left',
+  RIGHT: 'right',
+  ACTION: 'action',
+};
