@@ -969,9 +969,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var style = {
-  height: _constants.CELL_SIZE * 20,
-  width: _constants.CELL_SIZE * 10,
-  background: '#E0E0E0'
+  height: _constants.CELL_SIZE * _constants.Y_TILES,
+  width: _constants.CELL_SIZE * _constants.X_TILES,
+  background: '#E0E0E0',
+  padding: _constants.CELL_SIZE / 10
 };
 
 var FillerShooting = function (_React$Component) {
@@ -983,7 +984,7 @@ var FillerShooting = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (FillerShooting.__proto__ || Object.getPrototypeOf(FillerShooting)).call(this));
 
     _this.state = {
-      currentScene: _constants.SCENES.OVER
+      currentScene: _constants.SCENES.GAME
     };
     return _this;
   }
@@ -18336,6 +18337,12 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _cell = __webpack_require__(30);
+
+var _cell2 = _interopRequireDefault(_cell);
+
+var _constants = __webpack_require__(28);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -18350,17 +18357,41 @@ var Game = function (_Component) {
   function Game() {
     _classCallCheck(this, Game);
 
-    return _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this));
+
+    var emptyGrid = Array(_constants.Y_TILES).fill(Array(_constants.X_TILES).fill(1, 0, _constants.X_TILES), 0, _constants.Y_TILES);
+    _this.state = {
+      grid: emptyGrid
+    };
+    return _this;
   }
 
   _createClass(Game, [{
-    key: 'render',
-    value: function render() {
+    key: 'buildRow',
+    value: function buildRow(row, index) {
+      var cells = row.map(function (cell, index) {
+        return _react2.default.createElement(_cell2.default, { key: 'cell-' + index, filled: cell === 1 });
+      });
+
       return _react2.default.createElement(
         'div',
-        null,
-        ' The game '
+        { key: index, style: { height: _constants.CELL_SIZE } },
+        ' ',
+        cells,
+        ' '
       );
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var grid = this.state.grid;
+
+
+      return grid.map(function (row, index) {
+        return _this2.buildRow(row, index);
+      });
     }
   }]);
 
@@ -18379,7 +18410,9 @@ exports.default = Game;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var CELL_SIZE = exports.CELL_SIZE = 30;
+var CELL_SIZE = exports.CELL_SIZE = 20;
+var X_TILES = exports.X_TILES = 10;
+var Y_TILES = exports.Y_TILES = 20;
 var SCENES = exports.SCENES = {
   SETTINGS: 1,
   OVER: 2,
@@ -18467,6 +18500,79 @@ var SettingsScene = function (_Component) {
 }(_react.Component);
 
 exports.default = SettingsScene;
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _constants = __webpack_require__(28);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Cell = function (_Component) {
+  _inherits(Cell, _Component);
+
+  function Cell() {
+    _classCallCheck(this, Cell);
+
+    return _possibleConstructorReturn(this, (Cell.__proto__ || Object.getPrototypeOf(Cell)).apply(this, arguments));
+  }
+
+  _createClass(Cell, [{
+    key: 'renderInnerCell',
+    value: function renderInnerCell() {
+      var filled = this.props.filled;
+
+      var style = {
+        backgroundColor: filled ? '#404040' : '#E0E0E0',
+        height: '100%',
+        width: '100%'
+      };
+
+      return _react2.default.createElement('div', { style: style });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var style = {
+        height: _constants.CELL_SIZE,
+        width: _constants.CELL_SIZE,
+        padding: _constants.CELL_SIZE / 10,
+        display: 'inline-block',
+        boxSizing: 'border-box'
+      };
+
+      return _react2.default.createElement(
+        'div',
+        { style: style },
+        this.renderInnerCell()
+      );
+    }
+  }]);
+
+  return Cell;
+}(_react.Component);
+
+exports.default = Cell;
 
 /***/ })
 /******/ ]);
