@@ -36,21 +36,30 @@ export default class SettingsScene extends Component {
   }
 
   renderSettingsScene() {
-    const { handleLevelChange, handleSpeedChange } = this.props;
+    const {
+      onRequestLevelChange,
+      onRequestSpeedChange,
+      onRequestStartGame,
+      level,
+      speed,
+    } = this.props;
 
     return (
       <div style={style.fullWidth}>
         <div style={{ ...style.leftFlex, ...style.formGroup }}>
           <span style={style.label}>Level:</span>
-          <select onChange={handleLevelChange}>
+          <select onChange={(e) => onRequestLevelChange(Number(e.target.value))} value={level}>
             { Array(10).fill(0).map((_, index) => <option key={index} value={index + 1}>{index + 1}</option>) }
           </select>
         </div>
         <div style={{ ...style.leftFlex, ...style.formGroup }}>
           <span style={style.label}>Speed:</span>
-          <select onChange={handleSpeedChange}>
+          <select onChange={(e) => onRequestSpeedChange(Number(e.target.value))} value={speed}>
             { Array(10).fill(0).map((_, index) => <option key={index} value={index + 1}>{index + 1}</option>) }
           </select>
+        </div>
+        <div style={{ ...style.formGroup }}>
+          <button onClick={onRequestStartGame}> Start Game </button>
         </div>
       </div>
     );
@@ -71,11 +80,9 @@ export default class SettingsScene extends Component {
 SettingsScene.propTypes = {
   showOverScene: PropTypes.bool.isRequired,
   showSettingsScene: PropTypes.bool.isRequired,
-  handleLevelChange: PropTypes.func,
-  handleSpeedChange: PropTypes.func,
-}
-
-SettingsScene.defaultProps = {
-  handleLevelChange: () => {},
-  handleSpeedChange: () => {},
+  level: PropTypes.number.isRequired,
+  speed: PropTypes.number.isRequired,
+  onRequestLevelChange: PropTypes.func.isRequired,
+  onRequestSpeedChange: PropTypes.func.isRequired,
+  onRequestStartGame: PropTypes.func.isRequired,
 };

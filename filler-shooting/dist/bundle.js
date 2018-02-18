@@ -1022,24 +1022,49 @@ var FillerShooting = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (FillerShooting.__proto__ || Object.getPrototypeOf(FillerShooting)).call(this));
 
     _this.state = {
-      currentScene: _constants.SCENES.SETTINGS
+      currentScene: _constants.SCENES.SETTINGS,
+      level: 1,
+      speed: 1
     };
     return _this;
   }
 
   _createClass(FillerShooting, [{
+    key: 'handleLevelChange',
+    value: function handleLevelChange(level) {
+      this.setState({ level: level });
+    }
+  }, {
+    key: 'handleSpeedChange',
+    value: function handleSpeedChange(speed) {
+      this.setState({ speed: speed });
+    }
+  }, {
+    key: 'handleStartGame',
+    value: function handleStartGame() {
+      this.setState({ currentScene: _constants.SCENES.GAME });
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var currentScene = this.state.currentScene;
+      var _state = this.state,
+          currentScene = _state.currentScene,
+          level = _state.level,
+          speed = _state.speed;
 
 
       return _react2.default.createElement(
         'div',
         { style: style },
-        currentScene === _constants.SCENES.GAME && _react2.default.createElement(_game2.default, null),
+        currentScene === _constants.SCENES.GAME && _react2.default.createElement(_game2.default, { speed: speed, level: level }),
         currentScene != _constants.SCENES.GAME && _react2.default.createElement(_settingsScene2.default, {
           showOverScene: currentScene === _constants.SCENES.OVER,
-          showSettingsScene: currentScene === _constants.SCENES.SETTINGS
+          showSettingsScene: currentScene === _constants.SCENES.SETTINGS,
+          onRequestLevelChange: this.handleLevelChange.bind(this),
+          onRequestSpeedChange: this.handleSpeedChange.bind(this),
+          onRequestStartGame: this.handleStartGame.bind(this),
+          level: level,
+          speed: speed
         })
       );
     }
@@ -18575,8 +18600,11 @@ var SettingsScene = function (_Component) {
     key: 'renderSettingsScene',
     value: function renderSettingsScene() {
       var _props = this.props,
-          handleLevelChange = _props.handleLevelChange,
-          handleSpeedChange = _props.handleSpeedChange;
+          onRequestLevelChange = _props.onRequestLevelChange,
+          onRequestSpeedChange = _props.onRequestSpeedChange,
+          onRequestStartGame = _props.onRequestStartGame,
+          level = _props.level,
+          speed = _props.speed;
 
 
       return _react2.default.createElement(
@@ -18592,7 +18620,9 @@ var SettingsScene = function (_Component) {
           ),
           _react2.default.createElement(
             'select',
-            { onChange: handleLevelChange },
+            { onChange: function onChange(e) {
+                return onRequestLevelChange(Number(e.target.value));
+              }, value: level },
             Array(10).fill(0).map(function (_, index) {
               return _react2.default.createElement(
                 'option',
@@ -18612,7 +18642,9 @@ var SettingsScene = function (_Component) {
           ),
           _react2.default.createElement(
             'select',
-            { onChange: handleSpeedChange },
+            { onChange: function onChange(e) {
+                return onRequestSpeedChange(Number(e.target.value));
+              }, value: speed },
             Array(10).fill(0).map(function (_, index) {
               return _react2.default.createElement(
                 'option',
@@ -18620,6 +18652,15 @@ var SettingsScene = function (_Component) {
                 index + 1
               );
             })
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { style: _extends({}, style.formGroup) },
+          _react2.default.createElement(
+            'button',
+            { onClick: onRequestStartGame },
+            ' Start Game '
           )
         )
       );
@@ -18650,13 +18691,11 @@ exports.default = SettingsScene;
 SettingsScene.propTypes = {
   showOverScene: _propTypes2.default.bool.isRequired,
   showSettingsScene: _propTypes2.default.bool.isRequired,
-  handleLevelChange: _propTypes2.default.func,
-  handleSpeedChange: _propTypes2.default.func
-};
-
-SettingsScene.defaultProps = {
-  handleLevelChange: function handleLevelChange() {},
-  handleSpeedChange: function handleSpeedChange() {}
+  level: _propTypes2.default.number.isRequired,
+  speed: _propTypes2.default.number.isRequired,
+  onRequestLevelChange: _propTypes2.default.func.isRequired,
+  onRequestSpeedChange: _propTypes2.default.func.isRequired,
+  onRequestStartGame: _propTypes2.default.func.isRequired
 };
 
 /***/ }),
