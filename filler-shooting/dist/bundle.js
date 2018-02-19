@@ -665,11 +665,11 @@ var SCENES = exports.SCENES = {
   GAME: 3
 };
 var CONTROLS = exports.CONTROLS = {
-  UP: 'up',
-  DOWN: 'down',
-  LEFT: 'left',
-  RIGHT: 'right',
-  ACTION: 'action'
+  UP: 'UP',
+  DOWN: 'DOWN',
+  LEFT: 'LEFT',
+  RIGHT: 'RIGHT',
+  DO: 'DO'
 };
 
 /***/ }),
@@ -18313,6 +18313,10 @@ var _cell2 = _interopRequireDefault(_cell);
 
 var _constants = __webpack_require__(9);
 
+var _keyboard = __webpack_require__(35);
+
+var _keyboard2 = _interopRequireDefault(_keyboard);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -18332,16 +18336,98 @@ var Game = function (_Component) {
     var level = props.level,
         speed = props.speed;
 
-    var emptyGrid = Array(_constants.Y_TILES).fill(Array(_constants.X_TILES).fill(1, 0, _constants.X_TILES), 0, _constants.Y_TILES);
+    var emptyGrid = _this.getEmptyGrid();
+    var playerCenterX = Math.floor(_constants.X_TILES / 2);
+    emptyGrid[_constants.Y_TILES - 1][playerCenterX] = 1;
+    emptyGrid[_constants.Y_TILES - 2][playerCenterX] = 1;
+    emptyGrid[_constants.Y_TILES - 1][playerCenterX - 1] = 1;
+    emptyGrid[_constants.Y_TILES - 1][playerCenterX + 1] = 1;
+
+    // set up controllers
+    _this.controllerA = new _keyboard2.default();
+    _this.controllerA.bindController();
+
     _this.state = {
       grid: emptyGrid,
+      lastActionTimestamp: _this.controllerA.getActions().timestamp,
+      playerCenterX: playerCenterX,
       level: level,
       speed: speed
     };
+
+    _this.startInterval();
     return _this;
   }
 
   _createClass(Game, [{
+    key: 'getEmptyGrid',
+    value: function getEmptyGrid() {
+      return new Array(_constants.Y_TILES).fill(0).map(function () {
+        return new Array(_constants.X_TILES).fill(0, 0, _constants.X_TILES);
+      });
+    }
+  }, {
+    key: 'startInterval',
+    value: function startInterval() {
+      this.intervalId = setInterval(this.updateGame.bind(this), 100);
+    }
+  }, {
+    key: 'stopInterval',
+    value: function stopInterval() {
+      clearInterval(this.intervalId);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.controllerA.unbindController();
+      this.stopInterval();
+    }
+  }, {
+    key: 'updateGame',
+    value: function updateGame() {
+      var grid = void 0;
+      var actions = this.controllerA.getActions();
+
+      if (actions.timestamp !== this.state.lastActionTimestamp) {
+        this.controllerA.resetActions();
+        var centerX = this.state.playerCenterX - actions.LEFT + actions.RIGHT;
+        centerX = centerX < 0 ? 0 : centerX;
+        centerX = centerX >= _constants.X_TILES ? _constants.X_TILES - 1 : centerX;
+        grid = this.drawPlayer(centerX, this.getEmptyGrid());
+        this.setState({
+          grid: grid,
+          playerCenterX: centerX,
+          lastActionTimestamp: actions.timestamp
+        });
+      }
+
+      // Draw a new line and shift the others here
+      // if((this.timestamp - new Date().getTime()) >= 1000) {
+
+      // }
+    }
+
+    // return new grid with player drawn.
+
+  }, {
+    key: 'drawPlayer',
+    value: function drawPlayer(centerPieceX, grid) {
+      var newGrid = grid.slice();
+
+      newGrid[_constants.Y_TILES - 1][centerPieceX] = 1;
+      newGrid[_constants.Y_TILES - 2][centerPieceX] = 1;
+
+      // check if edge pieces are within range and draw.
+      if (centerPieceX - 1 >= 0) {
+        newGrid[_constants.Y_TILES - 1][centerPieceX - 1] = 1;
+      }
+      if (centerPieceX + 1 < _constants.X_TILES) {
+        newGrid[_constants.Y_TILES - 1][centerPieceX + 1] = 1;
+      }
+
+      return newGrid;
+    }
+  }, {
     key: 'buildRow',
     value: function buildRow(row, index) {
       var cells = row.map(function (cell, index) {
@@ -19385,6 +19471,158 @@ var FillerShooting = function (_Component) {
 }(_react.Component);
 
 exports.default = FillerShooting;
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _controls = __webpack_require__(36);
+
+var _controls2 = _interopRequireDefault(_controls);
+
+var _constants = __webpack_require__(9);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var KEY = {
+  LEFT: 37,
+  RIGHT: 39,
+  A: 65,
+  D: 68,
+  SPACE: 32,
+  ENTER: 13
+};
+
+var Keyboard = function (_Controls) {
+  _inherits(Keyboard, _Controls);
+
+  function Keyboard() {
+    _classCallCheck(this, Keyboard);
+
+    return _possibleConstructorReturn(this, (Keyboard.__proto__ || Object.getPrototypeOf(Keyboard)).call(this));
+  }
+
+  _createClass(Keyboard, [{
+    key: 'bindController',
+    value: function bindController() {
+      window.addEventListener('keydown', this.handleKeys.bind(this, true));
+    }
+  }, {
+    key: 'unbindController',
+    value: function unbindController() {
+      window.removeEventListener('keydown', this.handleKeys);
+    }
+  }, {
+    key: 'handleKeys',
+    value: function handleKeys(value, e) {
+      switch (e.keyCode) {
+        case KEY.LEFT:
+        case KEY.A:
+          this.setAction(_constants.CONTROLS.LEFT);
+          return;
+        case KEY.RIGHT:
+        case KEY.D:
+          this.setAction(_constants.CONTROLS.RIGHT);
+          return;
+        case KEY.SPACE:
+        case KEY.ENTER:
+          this.setAction(_constants.CONTROLS.DO);
+          return;
+      }
+    }
+  }]);
+
+  return Keyboard;
+}(_controls2.default);
+
+exports.default = Keyboard;
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _actionsMap;
+
+var _constants = __webpack_require__(9);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; } /**
+                                                                                                                                                                                                                   * Generic Controls interface.
+                                                                                                                                                                                                                   * Extend to handle different types of controls e.g. keyboard, gamepad
+                                                                                                                                                                                                                   */
+
+var actionsMap = (_actionsMap = {}, _defineProperty(_actionsMap, _constants.CONTROLS.UP, 0), _defineProperty(_actionsMap, _constants.CONTROLS.DOWN, 0), _defineProperty(_actionsMap, _constants.CONTROLS.LEFT, 0), _defineProperty(_actionsMap, _constants.CONTROLS.RIGHT, 0), _defineProperty(_actionsMap, _constants.CONTROLS.DO, 0), _actionsMap);
+
+var Controls = function () {
+  function Controls() {
+    _classCallCheck(this, Controls);
+
+    this._queue = Object.assign({
+      timestamp: new Date().getTime()
+    }, actionsMap);
+  }
+
+  _createClass(Controls, [{
+    key: 'setAction',
+    value: function setAction(action) {
+      if (!_constants.CONTROLS[action]) {
+        // If it isn't a valid control, do nothing.
+        return;
+      }
+
+      this._queue[action]++;
+      this._queue.timestamp = new Date().getTime();
+    }
+  }, {
+    key: 'getActions',
+    value: function getActions() {
+      return Object.assign({}, this._queue);
+    }
+  }, {
+    key: 'resetActions',
+    value: function resetActions() {
+      this._queue = Object.assign({ timestamp: this._queue.timestamp }, actionsMap);
+    }
+
+    // should be implemented in the child classes.
+
+  }, {
+    key: 'bindControllers',
+    value: function bindControllers() {}
+  }, {
+    key: 'unbindControllers',
+    value: function unbindControllers() {}
+  }]);
+
+  return Controls;
+}();
+
+exports.default = Controls;
 
 /***/ })
 /******/ ]);

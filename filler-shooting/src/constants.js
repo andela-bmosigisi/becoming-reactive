@@ -7,9 +7,9 @@ export const SCENES = {
   GAME: 3,
 };
 export const CONTROLS = {
-  UP: 'up',
-  DOWN: 'down',
-  LEFT: 'left',
-  RIGHT: 'right',
-  ACTION: 'action',
+  UP: 'UP',
+  DOWN: 'DOWN',
+  LEFT: 'LEFT',
+  RIGHT: 'RIGHT',
+  DO: 'DO',
 };
